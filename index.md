@@ -1,12 +1,21 @@
-## Welcome to GitHub Pages
+## Welcome to Hire Hub
 
-You can use the [editor on GitHub](https://github.com/Dennis7456/alxmvp/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Hire Hub is a Demo Hiring Website Project
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Hire Hub gives students the opportunity to apply for Entry Level Jobs, Graduate and Internship programmes available on the website.
 
-### Markdown
+### How it works.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+####1. Students
+Students Apply as individuals or according to their respective instituitions.
+
+####2. Employers
+Employers post jobs on the website and accept applications from students and other aspiring candidates.
+
+####3. Instructors
+Instructors provide recommendations and advice for both students and employers.
+
+<!-- Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
 ```markdown
 Syntax highlighted code block
@@ -23,7 +32,7 @@ Syntax highlighted code block
 
 **Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
+[Link](url) and ![Image](src) -->
 ```
 
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
