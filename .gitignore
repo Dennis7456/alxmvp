@@ -24,4 +24,4 @@ yarn-error.log*
 
 # others
 alxmvp-frontend/api/.flaskenv
-/alxmvp-frontend/api/venv/
+alxmvp-frontend/api/venv/
