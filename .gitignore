@@ -1,6 +1,6 @@
 #Environment
 venv/
-hirehub-api/.flaskenv
+.flaskenv
 
 #Others
 .DS_Store
