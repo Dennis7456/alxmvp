@@ -5,8 +5,7 @@ from pathlib import Path
 env_path = Path('../') / '.env'
 load_dotenv(dotenv_path=env_path)
 class Config:
-        #Env
-    #SECRET_KEY= '144d89a45a23fbb644e1a57c9ebfbcec'
+    #Env
     SECRET_KEY = os.getenv('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
     #Mail
