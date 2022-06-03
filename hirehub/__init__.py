@@ -27,11 +27,11 @@ def create_app(config_class=Config):
     mail.init_app(app)
     
     from hirehub.users.routes import users
-    from hirehub.posts.routes import posts
+    from hirehub.jobposts.routes import job_posts
     from hirehub.main.routes import main
     from hirehub.errors.handlers import errors
     app.register_blueprint(users)
-    app.register_blueprint(posts)
+    app.register_blueprint(job_posts)
     app.register_blueprint(main)
     app.register_blueprint(errors)
 

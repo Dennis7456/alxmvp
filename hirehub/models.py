@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from email.policy import default
 import pytz
 # from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import jwt
@@ -20,7 +21,7 @@ class User(db.Model, UserMixin):
     profile = db.relationship('Profile', backref='owner', uselist=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    posts = db.relationship('Post', backref='author', lazy=True)
+    job_posts = db.relationship('JobPost', backref='owner', lazy=True)
     '''Function to generate user token
     Using pyjwt but authlib is also a good candidate for this functionality'''
     def get_reset_token(self, expiration=600):
@@ -57,15 +58,23 @@ class User(db.Model, UserMixin):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
 
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
+class JobPost(db.Model):
+    post_id = db.Column(db.Integer, primary_key=True)
+    company_name = db.Column(db.String(128))
+    desired_major = db.Column(db.String(128))
+    job_title = db.Column(db.String(90))
+    job_desc = db.Column(db.String(1500))
+    more_info_name = db.Column(db.String(45))
+    more_info = db.Column(db.LargeBinary)
+    email = db.Column(db.String(90))
+    position = db.Column(db.String(64))
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # app = db.relationship('Application', backref='JobPost', lazy='dynamic')
+
 
     def __repr__(self):
-        return f"Post('{self.title}', '{self.date_posted}')"
+        return f"JobPost('{self.company_name}', '{self.desired_major}', '{self.job_title}', '{self.job_desc}', '{self.more_info}', '{self.more_info_name}', '{self.email}', '{self.position}', '{self.date_posted}', '{self.user_id}')"
 
 class Profile(db.Model, UserMixin):
     profile_id = db.Column(db.Integer, primary_key=True)

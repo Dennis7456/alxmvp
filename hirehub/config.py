@@ -15,7 +15,3 @@ class Config:
     MAIL_USE_TLS = os.getenv('MAIL_USE_TLS')
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-
-    #upload file
-    UPLOAD_FOLDER = '/static/resume_files'
-    ALLOWED_EXTENSIONS = 'pdf'

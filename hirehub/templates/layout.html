@@ -33,12 +33,18 @@
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
               {% if current_user.role == 'recruiter' %}
-                <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">Create New Job Post</a>
+              {% if current_user.job_posts %}
+              <a class="nav-item nav-link" href="{{ url_for('job_post.my_job_posts') }}">Jobs</a>
+              {% else %}
+              <a class="nav-item nav-link" href="{{ url_for('job_posts.new_job_post') }}">Create New Job Post</a>
+                {% endif %}
                 {% endif %}
                 {% if current_user.profile %}
                 <a class="nav-item nav-link" href="{{ url_for('users.profile') }}">My Profile</a>
                 {% else %}
+                {% if current_user.role == 'student' or current_user.role == 'student' %}
                 <a class="nav-item nav-link" href="{{ url_for('users.new_profile') }}">Create Profile</a>
+                {% endif %}
                 {% endif %}
                 
                 <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Account</a>

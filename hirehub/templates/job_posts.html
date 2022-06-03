@@ -5,17 +5,23 @@
           <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
+              <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ job_posts.owner.username }}</a>
               <small class="text-muted">{{ job_posts.date_posted.strftime('%Y-%m-%d') }}</small>
             </div>
-            <h2><a class="article-title" href="{{ url_for('job_posts.post', post_id=post.id) }}">{{ job_posts.job_title }}</a></h2>
+            <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ job_posts.job_title }}</a></h2>
             <p class="article-content">{{ job_posts.job_desc }}</p>
+            <p class="article-content">{{ job_posts.company_name }}</p>
+            <p class="article-content">{{ job_posts.desired_major }}</p>
+            <p class="article-content">{{ job_posts.more_info_name }}</p>
+            <p class="article-content">{{ job_posts.more_info }}</p>
+            <p class="article-content">{{ job_posts.email }}</p>
+            <p class="article-content">{{ job_posts.position }}</p>
           </div>
         </article>
     {% endfor %}
-    {% for page_num in job_posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
       {% if page_num %}
-        {% if job_posts.page == page_num %}
+        {% if posts.page == page_num %}
           <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
         {% else %}
           <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>

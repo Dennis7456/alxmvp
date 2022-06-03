@@ -3,7 +3,7 @@ from fileinput import filename
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from hirehub import db, bcrypt
-from hirehub.models import User, Post, Profile
+from hirehub.models import User, JobPost, Profile
 from hirehub.config import Config
 from flask import current_app
 from werkzeug.utils import secure_filename
@@ -97,6 +97,8 @@ def new_profile():
 @login_required
 def profile():
     form = UpdateProfileForm()
+    if not current_user.profile:
+        return redirect(url_for('users.new_profile'))
     if form.validate_on_submit():
         if form.resume.data:
             doc_file = save_file(form.resume.data)
@@ -134,10 +136,10 @@ def profile():
 def user_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    posts = Post.query.filter_by(author=user)\
+    job_posts = JobPost.query.filter_by(owner=user)\
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
-    return render_template('user_posts.html', posts=posts, user=user)
+    return render_template('user_job_posts.html', job_posts=job_posts, user=user)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
