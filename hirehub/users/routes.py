@@ -1,10 +1,15 @@
+import os
+from fileinput import filename
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from hirehub import db, bcrypt
-from hirehub.models import User, Post
-from hirehub.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
+from hirehub.models import User, Post, Profile
+from hirehub.config import Config
+from flask import current_app
+from werkzeug.utils import secure_filename
+from hirehub.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, UpdateProfileForm, ProfileForm,
                                    RequestResetForm, ResetPasswordForm)
-from hirehub.users.utils import save_picture, send_reset_email
+from hirehub.users.utils import save_picture, send_reset_email, save_file
 
 users = Blueprint('users', __name__)
 
@@ -16,7 +21,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        user = User(username=form.username.data, email=form.email.data, role=form.role.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
@@ -66,6 +71,64 @@ def account():
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
 
+@users.route("/profile/new", methods=['GET', 'POST'])
+@login_required
+def new_profile():
+    if current_user.profile:
+        return redirect(url_for('users.profile'))
+    form = ProfileForm()
+    if form.validate_on_submit():
+        file = request.files.get('resume')
+        if not file:
+            flash('No file part', 'danger')
+            return redirect(url_for('users.new_profile'))
+        if form.resume.data:
+            resume_file = save_file(file)
+        profile = Profile(first_name=form.first_name.data, last_name=form.last_name.data, major=form.major.data, company_name=form.company_name.data, email=form.email.data, phone=form.phone.data, resume=resume_file, resume_description=form.resume_description.data, address=form.address.data, address_two=form.address_two.data, occupation=form.occupation.data, owner=current_user)
+        db.session.add(profile)
+        db.session.commit()
+        flash('Your profile has been created!', 'success')
+        return redirect(url_for('users.profile'))
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    return render_template('create_profile.html', title='Create Profile',
+                           form=form, legend='Create Profile', image_file=image_file)
+
+@users.route("/profile", methods=['GET', 'POST'])
+@login_required
+def profile():
+    form = UpdateProfileForm()
+    if form.validate_on_submit():
+        if form.resume.data:
+            doc_file = save_file(form.resume.data)
+            current_user.resume_file = doc_file
+        current_user.profile.first_name = form.first_name.data
+        current_user.profile.last_name = form.last_name.data
+        current_user.profile.major = form.major.data
+        current_user.profile.company_name = form.company_name.data
+        current_user.profile.email = form.email.data
+        current_user.profile.phone = form.phone.data
+        current_user.profile.resume_description = form.resume_description.data
+        current_user.profile.address = form.address.data
+        current_user.profile.address_two = form.address_two.data
+        current_user.profile.occupation = form.occupation.data
+        db.session.commit()
+        flash('Your profile has been updated!', 'success')
+        return redirect(url_for('users.profile'))
+    elif request.method == 'GET':
+        form.first_name.data = current_user.profile.first_name
+        form.last_name.data = current_user.profile.last_name
+        form.major.data = current_user.profile.major
+        form.company_name.data = current_user.profile.company_name
+        form.email.data = current_user.profile.email
+        form.phone.data = current_user.profile.phone
+        form.resume_description.data = current_user.profile.resume_description
+        form.address.data = current_user.profile.address
+        form.address_two.data = current_user.profile.address_two
+        form.occupation.data = current_user.profile.occupation
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    resume_file = url_for('static', filename = 'resume_files/' + current_user.profile.resume)
+    return render_template('profile.html', title='Update Profile Info.', form=form, resume_file=resume_file, image_file=image_file, legend='Profile Info')
+
 
 @users.route("/user/<string:username>")
 def user_posts(username):
@@ -107,3 +170,4 @@ def reset_token(token):
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
+

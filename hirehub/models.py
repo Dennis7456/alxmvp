@@ -16,16 +16,13 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    role = db.Column(db.String(64))
+    profile = db.relationship('Profile', backref='owner', uselist=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
     '''Function to generate user token
-    N/B: TimedJSONWebSignatureSerializer has been discontinued'''
-    # def get_reset_token(self, expires_sec=1800):
-    #     # s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
-    #     # return s.dumps({'user_id': self.id}).decode('utf-8')
-
-    ''' Using pyjwt instead but authlib is also a good candidate for this functionality'''
+    Using pyjwt but authlib is also a good candidate for this functionality'''
     def get_reset_token(self, expiration=600):
         without_timezone = datetime.now()
         timezone = pytz.timezone("UTC")
@@ -40,16 +37,8 @@ class User(db.Model, UserMixin):
                        algorithm="HS256"
         )
         return reset_token
-        '''Function to verify user token'''
-    # @staticmethod
-    # def verify_reset_token(token):
-    #     # s = Serializer(current_app.config['SECRET_KEY'])
-    #     # try:
-    #     #     user_id = s.loads(token)['user_id']
-    #     # except:
-    #     #     return None
-    #     # return User.query.get(user_id)
 
+    ''' Using pyjwt instead'''
     @staticmethod
     def verify_reset_token(token):
         try:
@@ -77,3 +66,21 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
+
+class Profile(db.Model, UserMixin):
+    profile_id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(128), nullable=False)
+    last_name = db.Column(db.String(128), nullable=False)
+    major = db.Column(db.String(128))
+    company_name = db.Column(db.String(128))
+    email = db.Column(db.String(90), nullable=False)
+    phone = db.Column(db.String(30), nullable=False)
+    resume = db.Column(db.String(20), nullable=False)
+    resume_description = db.Column(db.Text)
+    address = db.Column(db.String(256), nullable=False)
+    address_two = db.Column(db.String(256))
+    occupation = db.Column(db.String(64))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Profile('{self.first_name}', '{self.last_name}', '{self.major}', '{self.company_name}', '{self.email}', '{self.phone}', '{self.resume}', '{self.resume_description}', '{self.address}', '{self.address_two}', '{self.occupation}', '{self.user_id}')"
