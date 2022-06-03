@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from email.policy import default
 import pytz
-# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import jwt
 from flask import current_app
 from hirehub import db, login_manager
@@ -22,6 +21,8 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     job_posts = db.relationship('JobPost', backref='owner', lazy=True)
+
+
     '''Function to generate user token
     Using pyjwt but authlib is also a good candidate for this functionality'''
     def get_reset_token(self, expiration=600):
@@ -58,26 +59,26 @@ class User(db.Model, UserMixin):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
 
-class JobPost(db.Model):
-    post_id = db.Column(db.Integer, primary_key=True)
-    company_name = db.Column(db.String(128))
-    desired_major = db.Column(db.String(128))
-    job_title = db.Column(db.String(90))
-    job_desc = db.Column(db.String(1500))
-    more_info_name = db.Column(db.String(45))
-    more_info = db.Column(db.LargeBinary)
-    email = db.Column(db.String(90))
-    position = db.Column(db.String(64))
+class JobPost(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    job_title = db.Column(db.String(90), nullable=False)
+    company_name = db.Column(db.String(128), nullable=False)
+    desired_major = db.Column(db.String(128), nullable=False)
+    job_desc = db.Column(db.Text, nullable=False)
+    job_desc_image = db.Column(db.String(20), nullable=False, default='default.jpg')
+    job_file = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(90), nullable=False)
+    position = db.Column(db.String(64), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # app = db.relationship('Application', backref='JobPost', lazy='dynamic')
+    job_application = db.relationship('JobApplication', backref='jobpost', lazy='dynamic')
 
 
     def __repr__(self):
         return f"JobPost('{self.company_name}', '{self.desired_major}', '{self.job_title}', '{self.job_desc}', '{self.more_info}', '{self.more_info_name}', '{self.email}', '{self.position}', '{self.date_posted}', '{self.user_id}')"
 
 class Profile(db.Model, UserMixin):
-    profile_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(128), nullable=False)
     last_name = db.Column(db.String(128), nullable=False)
     major = db.Column(db.String(128))
@@ -93,3 +94,21 @@ class Profile(db.Model, UserMixin):
 
     def __repr__(self):
         return f"Profile('{self.first_name}', '{self.last_name}', '{self.major}', '{self.company_name}', '{self.email}', '{self.phone}', '{self.resume}', '{self.resume_description}', '{self.address}', '{self.address_two}', '{self.occupation}', '{self.user_id}')"
+
+
+
+class JobApplication(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(128))
+    last_name = db.Column(db.String(128))
+    email = db.Column(db.String(90))
+    phone = db.Column(db.String(30))
+    cover_page_name = db.Column(db.String(45))
+    cover_page = db.Column(db.LargeBinary)
+    resume_name = db.Column(db.String(45))
+    resume = db.Column(db.LargeBinary)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    job_post_id = db.Column(db.Integer, db.ForeignKey('job_post.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Faculty('{self.first_name}', '{self.last_name}', '{self.email}', '{self.phone}', '{self.cover_page}', '{self.cover_page_name}', '{self.resume}', '{self.resume_name}', '{self.id_user}', '{self.id_post}')"

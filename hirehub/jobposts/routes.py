@@ -1,3 +1,4 @@
+import email
 from turtle import position
 from flask import (render_template, url_for, flash,
                    redirect, request, abort, Blueprint)
@@ -5,6 +6,7 @@ from flask_login import current_user, login_required
 from hirehub import db
 from hirehub.models import JobPost
 from hirehub.jobposts.forms import JobPostForm
+from hirehub.jobposts.utils import save_image_flyer, save_job_file
 
 job_posts = Blueprint('job_posts', __name__)
 
@@ -20,10 +22,18 @@ def new_job_post():
         abort(401)
     form = JobPostForm()
     if form.validate_on_submit():
-        job_post = JobPost(company_name=form.company_name.data, desired_major=form.desired_major.data, job_title=form.job_title.data, job_desc=form.job_desc.data, more_info_name=form.more_info_name.data, email=form.email.data, position=form.position.data)
+        if form.job_desc_image.data:
+            image_flyer = save_image_flyer(form.job_desc_image.data)
+        file = request.files.get('job_file')
+        if not file:
+            flash('No file selected', 'danger')
+            return redirect(url_for('job_posts.new_job_post'))
+        if form.job_file.data:
+            job_file_doc = save_job_file()
+        job_post = JobPost(job_title=form.job_title.data, company_name=form.company_name.data, desired_major=form.desired_major.data, job_desc=form.job_desc.data, job_desc_image=image_flyer, job_file=job_file_doc, email=form.email.data, position=form.position.data, user_id=current_user.id)
         db.session.add(job_post)
         db.session.commit()
-        flash('Your post has been created successfully!', 'success')
+        flash('Your job post has been created successfully!', 'success')
         return redirect(url_for('main.home'))
     return render_template('create_job_post.html', title='New Job Post', form=form, legend='New Job Post')
 

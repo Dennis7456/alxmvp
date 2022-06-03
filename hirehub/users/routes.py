@@ -80,7 +80,7 @@ def new_profile():
     if form.validate_on_submit():
         file = request.files.get('resume')
         if not file:
-            flash('No file part', 'danger')
+            flash('No file selected', 'danger')
             return redirect(url_for('users.new_profile'))
         if form.resume.data:
             resume_file = save_file(file)
