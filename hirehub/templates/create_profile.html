@@ -193,6 +193,10 @@
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
+            <legend class="border-bottom mb-4 text-center">Your Resume</legend>
+            <fieldset class="form-group">
+                <iframe src='{{ resume_file }}' width='690px' height='623px' frameborder='0'>This is an embedded <a target='_blank' href='#'>Microsoft Office</a> document, powered by <a target='_blank' href='http://office.com/webapps'>Office Online</a>.</iframe>
+            </fieldset>
         </form>
     </div>
 {% endblock content %}

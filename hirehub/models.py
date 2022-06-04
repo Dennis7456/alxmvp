@@ -75,7 +75,7 @@ class JobPost(db.Model, UserMixin):
 
 
     def __repr__(self):
-        return f"JobPost('{self.company_name}', '{self.desired_major}', '{self.job_title}', '{self.job_desc}', '{self.more_info}', '{self.more_info_name}', '{self.email}', '{self.position}', '{self.date_posted}', '{self.user_id}')"
+        return f"JobPost('{self.company_name}', '{self.desired_major}', '{self.job_title}', '{self.job_desc}', '{self.email}', '{self.position}', '{self.date_posted}', '{self.user_id}')"
 
 class Profile(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

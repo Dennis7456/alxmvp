@@ -34,7 +34,7 @@
               {% if current_user.is_authenticated %}
               {% if current_user.role == 'recruiter' %}
               {% if current_user.job_posts %}
-              <a class="nav-item nav-link" href="{{ url_for('job_post.my_job_posts') }}">Jobs</a>
+              <a class="nav-item nav-link" href="{{ url_for('job_posts.my_job_posts') }}">Jobs</a>
               {% else %}
               <a class="nav-item nav-link" href="{{ url_for('job_posts.new_job_post') }}">Create New Job Post</a>
                 {% endif %}

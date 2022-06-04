@@ -100,9 +100,11 @@ def profile():
     if not current_user.profile:
         return redirect(url_for('users.new_profile'))
     if form.validate_on_submit():
+        file = request.files.get('resume')
+        # print(nothing)
         if form.resume.data:
-            doc_file = save_file(form.resume.data)
-            current_user.resume_file = doc_file
+            doc_file = save_file(file)
+            current_user.profile.resume = doc_file
         current_user.profile.first_name = form.first_name.data
         current_user.profile.last_name = form.last_name.data
         current_user.profile.major = form.major.data
@@ -137,7 +139,7 @@ def user_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     job_posts = JobPost.query.filter_by(owner=user)\
-        .order_by(Post.date_posted.desc())\
+        .order_by(JobPost.date_posted.desc())\
         .paginate(page=page, per_page=5)
     return render_template('user_job_posts.html', job_posts=job_posts, user=user)
 
