@@ -34,6 +34,7 @@
               {% if current_user.is_authenticated %}
               {% if current_user.role == 'recruiter' %}
               {% if current_user.job_posts %}
+              <a class="nav-item nav-link" href="{{ url_for('job_posts.new_job_post') }}">New Job</a>
               <a class="nav-item nav-link" href="{{ url_for('job_posts.my_job_posts') }}">Jobs</a>
               {% else %}
               <a class="nav-item nav-link" href="{{ url_for('job_posts.new_job_post') }}">Create New Job Post</a>
@@ -42,8 +43,9 @@
                 {% if current_user.profile %}
                 <a class="nav-item nav-link" href="{{ url_for('users.profile') }}">My Profile</a>
                 {% else %}
-                {% if current_user.role == 'student' or current_user.role == 'student' %}
-                <a class="nav-item nav-link" href="{{ url_for('users.new_profile') }}">Create Profile</a>
+                {% if current_user.role == 'student' or current_user.role == 'faculty' %}
+                <a class="nav-item nav-link " href="{{ url_for('users.new_profile') }}">Create Profile</a>
+                <a class="nav-item nav-link " href="{{ url_for('applications.my_applications', username=current_user.username) }}">My Applications</a>
                 {% endif %}
                 {% endif %}
                 

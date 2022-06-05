@@ -1,9 +1,10 @@
 import email
+from email.mime import application
 from turtle import position
 from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
 from flask_login import current_user, login_required
 from hirehub import db
-from hirehub.models import JobPost
+from hirehub.models import JobApplication, JobPost, User
 from hirehub.jobposts.forms import JobPostForm
 from hirehub.jobposts.utils import save_image_flyer, save_job_file
 
@@ -11,9 +12,11 @@ job_posts = Blueprint('job_posts', __name__)
 
 @job_posts.route("/my_job_posts")
 def my_job_posts():
+    users = User.query.all()
     page = request.args.get('page', 1, type=int)
-    job_posts = JobPost.query.filter_by(user_id=current_user.id).order_by(JobPost.date_posted.desc()).paginate(page=page, per_page=5)
-    return render_template('job_posts.html', job_posts=job_posts)
+    job_posts = JobPost.query.filter_by(user_id=current_user.id).order_by(JobPost.date_updated.desc()).paginate(page=page, per_page=5)
+    applications = JobApplication.query.all()
+    return render_template('job_posts.html', job_posts=job_posts, users=users, applications=applications)
 
 @job_posts.route("/job_post/new", methods=['GET', 'POST'])
 @login_required
@@ -56,9 +59,6 @@ def update_post(job_post_id):
             image_flyer = save_image_flyer(form.job_desc_image.data)
             job_post.job_desc_image = image_flyer
         file = request.files.get('job_file')
-        # if not file:
-        #     flash('No file selected', 'danger')
-        #     return redirect(url_for('job_posts.update_post', job_post_id=job_post_id))
         if form.job_file.data:
             job_file_doc = save_job_file(file)
             job_post.job_file = job_file_doc
@@ -66,7 +66,6 @@ def update_post(job_post_id):
         job_post.company_name = form.company_name.data
         job_post.desired_major = form.desired_major.data
         job_post.job_desc = form.job_desc.data
-        # job_post.job_desc_image = form.job_desc_image.data
         job_post.email = form.email.data
         job_post.position = form.position.data
         db.session.commit()

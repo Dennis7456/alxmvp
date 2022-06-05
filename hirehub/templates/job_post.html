@@ -5,7 +5,7 @@
     <div class="media-body">
       <div class="article-metadata">
         <a class="mr-2" href="{{ url_for('users.user_posts', username=job_post.owner.username) }}">{{ job_post.owner.username }}</a>
-        <small class="text-muted">{{ job_post.date_posted.strftime('%Y-%m-%d') }}</small>
+        <small class="text-muted">{{ job_post.date_updated.strftime('%Y-%m-%d') }}</small>
         {% if job_post.owner == current_user %}
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('job_posts.update_post', job_post_id=job_post.id) }}">Update</a>

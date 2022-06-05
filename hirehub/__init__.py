@@ -26,15 +26,15 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     mail.init_app(app)
     
+    from hirehub.main.routes import main
     from hirehub.users.routes import users
     from hirehub.jobposts.routes import job_posts
-    from hirehub.main.routes import main
+    from hirehub.applications.routes import applications
     from hirehub.errors.handlers import errors
+    app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(job_posts)
-    app.register_blueprint(main)
+    app.register_blueprint(applications)
     app.register_blueprint(errors)
-
-    #Create admin account
 
     return app

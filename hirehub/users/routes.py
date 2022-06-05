@@ -4,7 +4,6 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from hirehub import db, bcrypt
 from hirehub.models import User, JobPost, Profile
-from hirehub.config import Config
 from flask import current_app
 from werkzeug.utils import secure_filename
 from hirehub.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, UpdateProfileForm, ProfileForm,
@@ -139,7 +138,7 @@ def user_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     job_posts = JobPost.query.filter_by(owner=user)\
-        .order_by(JobPost.date_posted.desc())\
+        .order_by(JobPost.date_updated.desc())\
         .paginate(page=page, per_page=5)
     return render_template('user_job_posts.html', job_posts=job_posts, user=user)
 

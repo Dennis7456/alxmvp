@@ -6,7 +6,7 @@
           <div class="media-body">
             <div class="article-metadata">
               <a class="mr-2" href="{{ url_for('users.user_posts', username=job_post.owner.username) }}">{{ job_post.owner.username }}</a>
-              <small class="text-muted">{{ job_post.date_posted.strftime('%Y-%m-%d') }}</small>
+              <small class="text-muted">{{ job_post.date_updated.strftime('%Y-%m-%d') }}</small>
             </div>
             <h2><a class="article-title" href="{{ url_for('job_posts.job_post', job_post_id=job_post.id) }}">{{ job_post.job_title }}</a></h2>
             <div class="mb-2"><b>Company/Organisation:</b> {{ job_post.company_name}}</div>
@@ -66,8 +66,8 @@
                 </div>
               </div>
               {% if current_user.role == 'student' %}
-              <a class="btn btn-secondary btn-sm mt-1 mb-1 text-light">Apply Now</a>
-              <a class="btn btn-danger btn-sm m-1 text-light">Report Job</a>
+              <a class="btn btn-secondary btn-sm mt-1 mb-1 text-light" href="{{ url_for('applications.apply', job_post_id=job_post.id) }}">Apply Now</a>
+              <a class="btn btn-danger btn-sm m-1 text-light" href="#">Report Job</a>
               {% endif %}
             </div>
           </div>
