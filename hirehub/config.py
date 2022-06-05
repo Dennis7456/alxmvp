@@ -6,6 +6,7 @@ env_path = Path('../') / '.env'
 load_dotenv(dotenv_path=env_path)
 class Config:
     #Env
+    FLASK_APP = 'run.app'
     SECRET_KEY = os.getenv('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
     #Mail

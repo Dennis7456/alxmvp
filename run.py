@@ -4,5 +4,4 @@ from hirehub.models import User
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    print(User.query.get(1))
+    app.run(debug=False, host='0.0.0.0', port=5005)
