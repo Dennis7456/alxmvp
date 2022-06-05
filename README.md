@@ -21,5 +21,5 @@ Users of Mystery Recruiter will be able to:
 
 ## IMAGES
 ![picture alt](img_desc1.png "Description image 1")
-![picture alt](img_desc2 "Description image 2")
-![picture alt](img_desc3 "Description image 3")
+![picture alt](img_desc2.png "Description image 2")
+![picture alt](img_desc3.png "Description image 3")
