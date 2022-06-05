@@ -20,6 +20,6 @@ Users of Mystery Recruiter will be able to:
 *	Manage user reports/tickets
 
 ## IMAGES
-![picture alt](./img_desc1 "Description image 1")
+![picture alt](img_desc1.png "Description image 1")
 ![picture alt](img_desc2 "Description image 2")
 ![picture alt](img_desc3 "Description image 3")
