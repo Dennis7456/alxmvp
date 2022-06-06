@@ -1,6 +1,5 @@
 import email
 from email.mime import application
-from turtle import position
 from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
 from flask_login import current_user, login_required
 from hirehub import db
