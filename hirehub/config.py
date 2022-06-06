@@ -8,7 +8,8 @@ class Config:
     #Env
     FLASK_APP = 'run.app'
     SECRET_KEY = os.getenv('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     #Mail
     #MAIL_SERVER = 'smtp.gmail.com'
     MAIL_SERVER = os.getenv('MAIL_SERVER')
