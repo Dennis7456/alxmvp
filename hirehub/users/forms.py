@@ -1,4 +1,3 @@
-from tkinter.tix import Select
 from flask import Flask
 from flask_wtf import FlaskForm
 import phonenumbers
