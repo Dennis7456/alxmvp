@@ -9,7 +9,12 @@ class Config:
     FLASK_APP = 'run.app'
     SECRET_KEY = os.getenv('SECRET_KEY')
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    uri = os.getenv('DATABASE_URL')
+    if uri.startswith('postgres://'):
+        uri = uri.replace('postgres://', 'postgresql://', 1)
+    # rest of connection code using the connection string `uri`
+    SQLALCHEMY_DATABASE_URI = uri
+
     #Mail
     #MAIL_SERVER = 'smtp.gmail.com'
     MAIL_SERVER = os.getenv('MAIL_SERVER')
