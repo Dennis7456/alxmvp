@@ -3,5 +3,5 @@ from hirehub import db
 from hirehub.models import User
 app = create_app()
 
-# if __name__ == '__main__':
-#     app.run(debug=False)  
+if __name__ == '__main__':
+    app.run(debug=False)  
