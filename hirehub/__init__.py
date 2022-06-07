@@ -51,6 +51,7 @@ def create_app():
     @click.command(name='create')
     @with_appcontext
     def create():
+        db.drop_all()
         db.create_all()
         print('***** Database created ****')
     app.cli.add_command(create)
