@@ -1,19 +1,17 @@
 import os
-# from dotenv import load_dotenv
-# from pathlib import Path
+from dotenv import load_dotenv
+from pathlib import Path
 
-# env_path = Path('../') / '.env'
-# load_dotenv(dotenv_path=env_path)
+env_path = Path('../') / '.env'
+load_dotenv(dotenv_path=env_path)
 class Config:
     #Env
-    SECRET_KEY = os.getenv('SECRET_KEY')
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
-    uri = os.getenv('DATABASE_URL')
-    if uri.startswith('postgres://'):
-        uri = uri.replace('postgres://', 'postgresql://', 1)
-    # rest of connection code using the connection string `uri`
-    SQLALCHEMY_DATABASE_URI = uri
-
+    FLASK_APP = 'run.app'
+    # SECRET_KEY = os.getenv('SECRET_KEY')
+    SECRET_KEY = '5250d32206145b683d54a6b9795526b8'
+    # SECRET_KEY = os.environ.get('SECRET_KEY')
+    print(SECRET_KEY)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
     #Mail
     #MAIL_SERVER = 'smtp.gmail.com'
     MAIL_SERVER = os.getenv('MAIL_SERVER')
