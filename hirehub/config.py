@@ -1,22 +1,21 @@
 from os import environ
-# from dotenv import load_dotenv
-# from pathlib import Path
 
-# env_path = Path('./') / '.env'
-# load_dotenv(dotenv_path=env_path)
-# class Config:
-#     #Env
-#     SECRET_KEY = 'b8245c88c4eb4666124a25702e896f0d'
-#     SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
-#     TEST=os.getenv('TEST')
-#     print(TEST)
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
 #     #Mail
-#     MAIL_SERVER = os.getenv('MAIL_SERVER')
-#     MAIL_PORT = os.getenv('MAIL_PORT')
-#     MAIL_USE_TLS = os.getenv('MAIL_USE_TLS')
-#     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
-#     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT = 587
+MAIL_USE_TLS = True
+MAIL_USERNAME = environ.get('MAIL_USERNAME')
+MAIL_PASSWORD = environ.get('MAIL_PASSWORD')
+MAIL_SENDER_NAME = environ.get('MAIL_SENDER_NAME')
+# print("****START****")
+# print(MAIL_USERNAME)
+# print(MAIL_PASSWORD)
+# print(MAIL_SENDER_NAME)
+# print("****END******")
 
 SECRET_KEY = environ.get('SECRET_KEY')
 uri = environ.get('DATABASE_URL')

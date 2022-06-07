@@ -1,10 +1,15 @@
 
 import os
+from os import environ
 from random import random
 import secrets
+from sqlite3 import connect
 from PIL import Image
 from flask import url_for, current_app
 from flask_mail import Message
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from hirehub import mail
 
 
@@ -31,11 +36,29 @@ def save_file(form_file):
 
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('Password Reset Request',
-                  sender='noreply@demo.com',
-                  recipients=[user.email])
-    msg.body = f'''To reset your password, visit the following link:
-{url_for('users.reset_token', token=token, _external=True)}
-If you did not make this request then simply ignore this email and no changes will be made.
-'''
-    mail.send(msg)
+    url = url_for('users.reset_token', token=token, _external=True)
+    print(url)
+#     msg = Message('Password Reset Request',
+#                   sender='noreply@demo.com',
+#                   recipients=[user.email])
+#     msg.body = f'''To reset your password, visit the following link:
+# {url_for('users.reset_token', token=token, _external=True)}
+# If you did not make this request then simply ignore this email and no changes will be made.
+# '''
+#     mail.send(msg)
+
+    body = ("Here is a link to reset you password: {}".format(url_for('users.reset_token', token=token, _external=True)))
+    # msg = MIMEMultipart('alternative')
+    msg = MIMEText(''.join(body))
+    msg['Subject'] = "'Password Reset Request"
+    msg['From']    = "essaypoint2019@gmail.com"
+    msg['To']      = "denniskiplangat.dk@gmail.com"
+
+
+    s = smtplib.SMTP('smtp.mailgun.org', 587)
+    MAIL_GUN_USERNAME = environ.get('MAIL_GUN_USERNAME')
+    MAIL_GUN_PASSWORD = environ.get('MAIL_GUN_PASSWORD')
+
+    s.login(MAIL_GUN_USERNAME, MAIL_GUN_PASSWORD)
+    s.sendmail(msg['From'], msg['To'], msg.as_string())
+    s.quit()
