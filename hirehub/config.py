@@ -19,4 +19,8 @@ from os import environ
 
 
 SECRET_KEY = environ.get('SECRET_KEY')
-SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL')
+uri = environ.get('DATABASE_URL')
+if uri.startswith("postgres://"):
+    uri = uri.replace('postgres://', 'postgresql://', 1)
+    
+SQLALCHEMY_DATABASE_URI = uri
