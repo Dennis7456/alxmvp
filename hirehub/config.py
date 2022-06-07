@@ -1,21 +1,22 @@
-import os
-from dotenv import load_dotenv
-from pathlib import Path
+from os import environ
+# from dotenv import load_dotenv
+# from pathlib import Path
 
-env_path = Path('../') / '.env'
-load_dotenv(dotenv_path=env_path)
-class Config:
-    #Env
-    FLASK_APP = 'run.app'
-    # SECRET_KEY = os.getenv('SECRET_KEY')
-    SECRET_KEY = '5250d32206145b683d54a6b9795526b8'
-    # SECRET_KEY = os.environ.get('SECRET_KEY')
-    print(SECRET_KEY)
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
-    #Mail
-    #MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_SERVER = os.getenv('MAIL_SERVER')
-    MAIL_PORT = os.getenv('MAIL_PORT')
-    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS')
-    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
-    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+# env_path = Path('./') / '.env'
+# load_dotenv(dotenv_path=env_path)
+# class Config:
+#     #Env
+#     SECRET_KEY = 'b8245c88c4eb4666124a25702e896f0d'
+#     SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
+#     TEST=os.getenv('TEST')
+#     print(TEST)
+#     #Mail
+#     MAIL_SERVER = os.getenv('MAIL_SERVER')
+#     MAIL_PORT = os.getenv('MAIL_PORT')
+#     MAIL_USE_TLS = os.getenv('MAIL_USE_TLS')
+#     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+#     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+
+
+SECRET_KEY = environ.get('SECRET_KEY')
+SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI')
