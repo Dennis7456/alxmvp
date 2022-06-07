@@ -1,6 +1,6 @@
 
 from os import environ
-from hirehub import commands
+
 from flask import Flask
 import click
 from flask.cli import with_appcontext
@@ -21,7 +21,7 @@ login_manager.login_message_category = 'info'
 mail = Mail()
 
 def create_app():
-    from hirehub import commands
+    
     app = Flask(__name__)
 
     # app.cli.add_command(commands.do_work)
