@@ -1,6 +1,9 @@
 
 from os import environ
+from hirehub import commands
 from flask import Flask
+import click
+from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -18,7 +21,11 @@ login_manager.login_message_category = 'info'
 mail = Mail()
 
 def create_app():
+    from hirehub import commands
     app = Flask(__name__)
+
+    # app.cli.add_command(commands.do_work)
+
     #App configurations
     #app.config.from_object(Config)
     app.config.from_pyfile('config.py')
@@ -31,11 +38,21 @@ def create_app():
     from hirehub.users.routes import users
     from hirehub.jobposts.routes import job_posts
     from hirehub.applications.routes import applications
+    
+    
+
     from hirehub.errors.handlers import errors
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(job_posts)
     app.register_blueprint(applications)
     app.register_blueprint(errors)
+
+    @click.command(name='create')
+    @with_appcontext
+    def create():
+        db.create_all()
+        print('***** Database created ****')
+    app.cli.add_command(create)
 
     return app
